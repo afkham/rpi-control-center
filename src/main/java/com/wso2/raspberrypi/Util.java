@@ -339,9 +339,9 @@ public class Util {
     private static BasicDataSource getBasicDataSource() {
         BasicDataSource ds = new BasicDataSource();
         ds.setDriverClassName("com.mysql.jdbc.Driver");
-        ds.setUrl("jdbc:mysql://rss1.stratoslive.wso2.com/rpi_azeez_org");
-        ds.setUsername("rpi_FHdBOhR3");
-        ds.setPassword("wso2");
+        ds.setUrl("jdbc:mysql://localhost:3306/RPI_CONTROL_CENTER");
+        ds.setUsername("admin");
+        ds.setPassword("admin");
         ds.setValidationQuery("SELECT 1");
         return ds;
     }
