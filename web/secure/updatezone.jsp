@@ -1,8 +1,6 @@
 <%@ page import="com.wso2.raspberrypi.RaspberryPi" %>
 <%@ page import="com.wso2.raspberrypi.Util" %>
-<%@ page import="org.apache.http.client.HttpClient" %>
-<%@ page import="org.apache.http.impl.client.HttpClientBuilder" %>
-<%@ page import="org.apache.http.client.methods.HttpGet" %>
+<%@ page import="com.wso2.raspberrypi.apicalls.APICall" %>
 <%
     String mac = request.getParameter("mac");
     String zoneID = request.getParameter("zoneID");
@@ -10,9 +8,7 @@
     raspberryPi.setZoneID(zoneID);
     Util.updateRaspberryPi(raspberryPi);
 
-    //TODO: call URL to register device
-    HttpClient client = HttpClientBuilder.create().build();
-    HttpGet get = new HttpGet(controlCenterUrl);
-    client.execute(get);
+    // call API to register device
+    APICall.registerDevice(mac, zoneID);
     System.out.println("Updated zone of Raspberry Pi: " + mac + " to " + zoneID);
 %>

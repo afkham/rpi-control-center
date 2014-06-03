@@ -23,12 +23,7 @@ import com.wso2.raspberrypi.apicalls.APICall;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
 import java.util.List;
-import java.util.Map;
-import java.util.Properties;
 
 /**
  * TODO: class level comment

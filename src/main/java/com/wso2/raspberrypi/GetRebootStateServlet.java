@@ -17,8 +17,6 @@
 */
 package com.wso2.raspberrypi;
 
-import com.wso2.raspberrypi.Util;
-
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;

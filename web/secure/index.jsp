@@ -1,10 +1,10 @@
 <%@page import="com.wso2.raspberrypi.RaspberryPi" %>
 <%@page import="com.wso2.raspberrypi.Util" %>
+<%@ page import="com.wso2.raspberrypi.Zone" %>
+<%@ page import="com.wso2.raspberrypi.ZonesRegistry" %>
 <%@ page import="java.text.SimpleDateFormat" %>
 <%@ page import="java.util.Date" %>
 <%@ page import="java.util.List" %>
-<%@ page import="com.wso2.raspberrypi.ZonesRegistry" %>
-<%@ page import="com.wso2.raspberrypi.Zone" %>
 <%@ page import="java.util.Map" %>
 
 

@@ -36,8 +36,23 @@ import java.util.List;
 public class APICall {
     private static String consumerKey = "WgFO8ftXdewCSMAdMtf1Vl9uOAAa";
     private static String consumerSecret = "yXdCdk4nXCv3kHVf1_u3fA74jRYa";
-    private static String submitUrl = "http://gateway.apicloud.cloudpreview.wso2.com:8280/token";
+    private static String tokenEndpoint = "http://gateway.apicloud.cloudpreview.wso2.com:8280/token";
 
+    public static void registerDevice(String deviceID, String zoneID){
+        String url = "http://gateway.apicloud.cloudpreview.wso2.com:8280/t/indikas.com/wso2coniot/1.0.0/conferences/2/iot/scannerZones";
+        Token token = getToken();
+        if (token != null) {
+            HttpClient httpClient = new HttpClient();
+            JSONObject json = new JSONObject();
+            json.put("rfidScannerId", deviceID);
+            json.put("zoneId", zoneID);
+            try {
+                httpClient.doPost(url, "Bearer " + token.getAccessToken(), json.toJSONString(),"application/json");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 
     public static List<Zone> listZones() {
         List<Zone> zones = new ArrayList<Zone>();
@@ -76,7 +91,7 @@ public class APICall {
 
 //            String payload = "grant_type=password&username="+username+"&password="+password;
             String payload = "grant_type=client_credentials";
-            HttpResponse httpResponse = httpClient.doPost(submitUrl, applicationToken,
+            HttpResponse httpResponse = httpClient.doPost(tokenEndpoint, applicationToken,
                     payload, "application/x-www-form-urlencoded");
             if (httpResponse.getStatusLine().getStatusCode() != 200) {
                 return null;
