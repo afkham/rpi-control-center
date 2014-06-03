@@ -251,7 +251,7 @@
             String mac = pi.getMacAddress();
             String ip = pi.getIpAddress();
             String label = pi.getLabel();
-            String zoneId = pi.getZone().getId();
+            String zoneId = pi.getZoneID() != null ? pi.getZoneID() : "";
             boolean selected = pi.isSelected();
             long lastUpdated = pi.getLastUpdated();
             i++;
@@ -271,14 +271,29 @@
         </td>
         <td><%= mac %>
         <td>
-        <select>
-        <% for (Map.Entry<String, Zone> entry : zones.entrySet()) {
-        %>
-           <option value="<%= entry.getKey()%>"><%= entry.getValue().getName()%></option>
-        <%
-        }
-        %>
-        </select>
+            <select id="<%= ip%>.zoneID" onchange="xmlhttpGet('updatezone.jsp?mac=<%= mac%>&zoneID=' + document.getElementById('<%= ip%>.zoneID').value,
+                    'Updated Zone of Raspberry Pi <%= mac%>')">
+
+                <%  if(zoneId.isEmpty()){
+                %>
+                    <option value="UNASSIGNED" selected="true">-- UNASSIGNED -- </option>
+                <% } else { %>
+                    <option value="UNASSIGNED">-- UNASSIGNED -- </option>
+                <%
+                }
+                    for (Map.Entry<String, Zone> entry : zones.entrySet()) {
+                    if (zoneId.equals(entry.getKey())) {
+                %>
+                <option value="<%= entry.getKey()%>" selected="true"><%= entry.getValue().getName()%>
+                </option>
+                <% } else { %>
+                <option value="<%= entry.getKey()%>"><%= entry.getValue().getName()%>
+                </option>
+                <%
+                        }
+                    }
+                %>
+            </select>
         </td>
         <td>
             <input type="text" size="20" id="<%= ip%>.label" value="<%= label%>"/>

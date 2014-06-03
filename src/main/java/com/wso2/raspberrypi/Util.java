@@ -82,6 +82,7 @@ public class Util {
         pi.setBlink(rs.getBoolean("blink"));
         pi.setReboot(rs.getBoolean("reboot"));
         pi.setSelected(rs.getBoolean("selected"));
+        pi.setZoneID(rs.getString("zone"));
         return pi;
     }
 
@@ -382,6 +383,7 @@ public class Util {
                                                   ",reboot=" + raspberryPi.isReboot() +
                                                   ",selected=" + raspberryPi.isSelected() +
                                                   ",label='" + raspberryPi.getLabel() +"'" +
+                                                  ",zone='" + raspberryPi.getZoneID() +"'" +
                                                   " where mac='" + raspberryPi.getMacAddress() + "'");
             prepStmt.execute();
         } catch (SQLException e) {
