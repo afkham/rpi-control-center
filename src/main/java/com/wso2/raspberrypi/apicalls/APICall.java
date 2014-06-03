@@ -19,6 +19,8 @@
 package com.wso2.raspberrypi.apicalls;
 
 import com.wso2.raspberrypi.Zone;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.http.HttpResponse;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -34,22 +36,29 @@ import java.util.List;
  * TODO: class level comment
  */
 public class APICall {
+    private static final Log log = LogFactory.getLog(APICall.class);
+
     private static String consumerKey = "WgFO8ftXdewCSMAdMtf1Vl9uOAAa";
     private static String consumerSecret = "yXdCdk4nXCv3kHVf1_u3fA74jRYa";
     private static String tokenEndpoint = "http://gateway.apicloud.cloudpreview.wso2.com:8280/token";
 
     public static void registerDevice(String deviceID, String zoneID){
-        String url = "http://gateway.apicloud.cloudpreview.wso2.com:8280/t/indikas.com/wso2coniot/1.0.0/conferences/2/iot/scannerZones";
+        String url = "http://gateway.apicloud.cloudpreview.wso2.com:8280/t/indikas.com/wso2coniot/1.0.0/conferences/2/iot/scannerZones/byScannerUUID";
         Token token = getToken();
         if (token != null) {
             HttpClient httpClient = new HttpClient();
             JSONObject json = new JSONObject();
-            json.put("rfidScannerId", deviceID);
+            json.put("rfidScannerUUID", deviceID);
             json.put("zoneId", zoneID);
             try {
-                httpClient.doPost(url, "Bearer " + token.getAccessToken(), json.toJSONString(),"application/json");
+                HttpResponse httpResponse =
+                        httpClient.doPost(url, "Bearer " + token.getAccessToken(), json.toJSONString(), "application/json");
+                int statusCode = httpResponse.getStatusLine().getStatusCode();
+                if(statusCode != 200){
+                    log.error("Device to Zone registration failed. HTTP Status Code:" + statusCode);
+                }
             } catch (IOException e) {
-                e.printStackTrace();
+                log.error("", e);
             }
         }
     }
@@ -63,16 +72,21 @@ public class APICall {
                 HttpResponse httpResponse =
                         httpClient.doGet("http://gateway.apicloud.cloudpreview.wso2.com:8280/t/indikas.com/wso2coniot/1.0.0/conferences/2/iot/zones",
                                 "Bearer " + token.getAccessToken());
-                JSONParser parser = new JSONParser();
-                JSONArray jsonArray = (JSONArray) parser.parse(httpClient.getResponsePayload(httpResponse));
-                for (int i = 0; i < jsonArray.size(); i++) {
-                    JSONObject obj = (JSONObject) jsonArray.get(i);
-                    zones.add(new Zone((String) obj.get("id"), (String) obj.get("name")));
+                int statusCode = httpResponse.getStatusLine().getStatusCode();
+                if(statusCode == 200){
+                    JSONParser parser = new JSONParser();
+                    JSONArray jsonArray = (JSONArray) parser.parse(httpClient.getResponsePayload(httpResponse));
+                    for (int i = 0; i < jsonArray.size(); i++) {
+                        JSONObject obj = (JSONObject) jsonArray.get(i);
+                        zones.add(new Zone((String) obj.get("id"), (String) obj.get("name")));
+                    }
+                } else {
+                    log.error("Could not get Zones. HTTP Status code: " + statusCode);
                 }
             } catch (IOException e) {
-                e.printStackTrace();
+                log.error("", e);
             } catch (ParseException e) {
-                e.printStackTrace();
+                log.error("", e);
             }
         }
 
@@ -99,7 +113,7 @@ public class APICall {
             String response = httpClient.getResponsePayload(httpResponse);
             return getAccessToken(response);
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error("", e);
             return null;
         }
     }
@@ -129,7 +143,7 @@ public class APICall {
             token.setTokenType((String) jsonObject.get("token_type"));
 
         } catch (ParseException e) {
-            e.printStackTrace();
+            log.error("", e);
         }
         return token;
 
