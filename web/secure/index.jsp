@@ -37,6 +37,7 @@
 <head>
     <link href="bootstrap/css/bootstrap.css" rel="stylesheet">
     <link href="css/local.css" rel="stylesheet">
+    <link href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
 
 
     <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
@@ -264,7 +265,7 @@
         [<a href="index.jsp?orderby=zone">Zone</a>]
         <% } %>
     </th>
-    <th>
+    <%--<th>
         <% if (!orderby.equals("rack")) {%>
         <a href="index.jsp?orderby=rack">Rack</a>
         <% } else { %>
@@ -284,7 +285,7 @@
         <% } else { %>
         [<a href="index.jsp?orderby=label">Label</a>]
         <% } %>
-    </th>
+    </th>--%>
     <th>
         <% if (!orderby.equals("load_avg")) {%>
         <a href="index.jsp?orderby=load_avg">Load Avg.</a>
@@ -299,13 +300,13 @@
         [<a href="index.jsp?orderby=free_mem">Free Memory</a>]
         <% } %>
     </th>
-    <th>
+    <%--<th>
         <% if (!orderby.equals("owner")) {%>
         <a href="index.jsp?orderby=owner">Owner</a>
         <% } else { %>
         [<a href="index.jsp?orderby=owner">Owner</a>]
         <% } %>
-    </th>
+    </th>--%>
     <th>
         <% if (!orderby.equals("last_updated")) {%>
         <a href="index.jsp?orderby=last_updated">Last Updated</a>
@@ -388,7 +389,7 @@
             %>
         </select>
     </td>
-    <td>
+    <%--<td>
         <input type="text" size="5" id="<%= ip%>.rack" value="<%= rack%>"/>
         <a href="#"
            onclick="xmlhttpGet('updatepi.jsp?mac=<%= mac%>&rack=' + document.getElementById('<%= ip%>.rack').value,
@@ -405,10 +406,10 @@
         <a href="#"
            onclick="xmlhttpGet('updatepi.jsp?mac=<%= mac%>&label=' + document.getElementById('<%= ip%>.label').value,
                    'Updated label of Raspberry Pi <%= mac%>')">Apply</a>
-    </td>
+    </td>--%>
     <td>...</td>
     <td>...</td>
-    <td>
+    <%--<td>
         <%
             if (pi.getReservedFor() == null || pi.getReservedFor().isEmpty()) {
         %>
@@ -424,7 +425,7 @@
         <%
             }
         %>
-    </td>
+    </td>--%>
     <td>
         <%= sdf.format(new Date(lastUpdated))%>
     </td>
@@ -475,15 +476,12 @@
         %>
     </td>
     <td>
-        <a href="#" onclick="deletePi('<%= mac%>')"><img src="images/delete.png" alt="Delete"
-                                                         width="16px" height="16px"/></a>
+        <a href="#" onclick="deletePi('<%= mac%>')"><i class="fa fa-trash-o"></i></a>
         &nbsp;
         <%
             if (selected) {
         %>
-        <a href="selectpi?mac=<%= mac%>&selected=false"><img src="images/clear.png"
-                                                             alt="Deselect" width="16px"
-                                                             height="16px"/></a>
+        <a href="selectpi?mac=<%= mac%>&selected=false"><i class="fa fa-space-shuttle"></i></a>
         <%
             }
         %>
