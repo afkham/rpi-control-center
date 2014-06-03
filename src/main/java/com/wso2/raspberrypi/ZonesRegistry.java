@@ -20,6 +20,7 @@ package com.wso2.raspberrypi;
 
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -33,15 +34,21 @@ public class ZonesRegistry {
         return instance;
     }
 
-    private ZonesRegistry(){
+    private ZonesRegistry() {
 
     }
 
-    public void addZone(Zone zone){
+    public void addZones(List<Zone> zones) {
+        for (Zone zone : zones) {
+            addZone(zone);
+        }
+    }
+
+    public void addZone(Zone zone) {
         zones.put(zone.getId(), zone);
     }
 
-    public Map<String, Zone> getZones(){
+    public Map<String, Zone> getZones() {
         return Collections.unmodifiableMap(zones);
     }
 }

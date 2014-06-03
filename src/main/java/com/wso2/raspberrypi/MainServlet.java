@@ -18,12 +18,15 @@
  */
 package com.wso2.raspberrypi;
 
+import com.wso2.raspberrypi.apicalls.APICall;
+
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
@@ -33,16 +36,11 @@ import java.util.Properties;
 public class MainServlet extends HttpServlet {
     @Override
     public void init(ServletConfig config) throws ServletException {
-        Properties zones = new Properties();
-        try {
-            zones.load(new FileInputStream(System.getProperty("carbon.home") + File.separator + "repository" +
-                    File.separator + "conf" + File.separator + "zones.properties"));
-            ZonesRegistry zonesRegistry = ZonesRegistry.getInstance();
-            for (Map.Entry<Object, Object> entry : zones.entrySet()) {
-                zonesRegistry.addZone(new Zone((String) entry.getKey(), (String) entry.getValue()));
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+//        Properties zones = new Properties();
+//            zones.load(new FileInputStream(System.getProperty("carbon.home") + File.separator + "repository" +
+//                    File.separator + "conf" + File.separator + "zones.properties"));
+        List<Zone> zones = APICall.listZones();
+        ZonesRegistry zonesRegistry = ZonesRegistry.getInstance();
+        zonesRegistry.addZones(zones);
     }
 }
