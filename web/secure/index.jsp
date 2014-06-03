@@ -1,9 +1,9 @@
 <%@page import="com.wso2.raspberrypi.RaspberryPi" %>
-<%@page import="com.wso2.raspberrypi.ZonesRegistry" %>
 <%@page import="com.wso2.raspberrypi.Util" %>
 <%@ page import="java.text.SimpleDateFormat" %>
 <%@ page import="java.util.Date" %>
 <%@ page import="java.util.List" %>
+<%@ page import="com.wso2.raspberrypi.ZonesRegistry" %>
 <%@ page import="com.wso2.raspberrypi.Zone" %>
 <%@ page import="java.util.Map" %>
 
@@ -20,13 +20,29 @@
         }
     }
     session.setAttribute("orderby", orderby);
+
     boolean autoRefresh = false;
     if ("on".equalsIgnoreCase(refresh)) {
         autoRefresh = true;
+        session.setAttribute("autorefresh", "true");
+    } else if("off".equalsIgnoreCase(refresh)){
+        autoRefresh = false;
+        session.setAttribute("autorefresh", "false");
+    } else {
+        autoRefresh = Boolean.valueOf((String) session.getAttribute("autorefresh"));
     }
 %>
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
+    <link href="bootstrap/css/bootstrap.css" rel="stylesheet">
+    <link href="css/local.css" rel="stylesheet">
+
+
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
     <style type="text/css">
         tr.d0 td {
             background-color: rgba(176, 168, 174, 0.30);
@@ -56,38 +72,37 @@
 
         function checkSelected() {
             $.ajax({
-                       type: "GET",
-                       url: "selectedpis",
-                       success: function (resp) {
-                           var data = resp.pis;
-                           if (data.length != 0 || rowsHighlighted) {
-                               var table = document.getElementById("pi-table");
-                               for (var j = 0, row; row = table.rows[j]; j++) {
-                                   if(row.className == "inactive") continue;
-                                   if (j % 2 == 0) {
-                                       row.className = "d0";
-                                   } else {
-                                       row.className = "d1";
-                                   }
-                                   rowsHighlighted = false;
-                               }
-                               for (var i = 0; i < data.length; i++) {
-                                   document.getElementById(data[i].mac + ".row").className = "sel";
-                                   rowsHighlighted = true;
-                               }
-                           }
-                       },
-                       error: function (json) {
-                           // To handle errors like bad connection, timeout, invalid url
+                type: "GET",
+                url: "selectedpis",
+                success: function (resp) {
+                    var data = resp.pis;
+                    if (data.length != 0 || rowsHighlighted) {
+                        var table = document.getElementById("pi-table");
+                        for (var j = 0, row; row = table.rows[j]; j++) {
+                            if(row.className == "inactive") continue;
+                            if (j % 2 == 0) {
+                                row.className = "d0";
+                            } else {
+                                row.className = "d1";
+                            }
+                            rowsHighlighted = false;
+                        }
+                        for (var i = 0; i < data.length; i++) {
+                            document.getElementById(data[i].mac + ".row").className = "sel";
+                            rowsHighlighted = true;
+                        }
+                    }
+                },
+                error: function (json) {
+                    // To handle errors like bad connection, timeout, invalid url
 
-                       },
-                       complete: function (json) {
-                           //This function is invoked after success or error functions.
-                       }
-                   });
+                },
+                complete: function (json) {
+                    //This function is invoked after success or error functions.
+                }
+            });
             setTimeout("checkSelected()", 10000);
         }
-
 
         setTimeout("checkSelected()", 10000);
 
@@ -101,10 +116,10 @@
             var element = document.getElementById(mac + '.blink');
             if (onOff == 'on') {
                 element.innerHTML =
-                '<a href="#" onclick=\"xmlhttpGet(\'blink.jsp?mac=' + mac + '&blink=true\', \'Blinking turned on for Raspberry Pi ' + mac + '\');toggleBlink(\'' + mac + '\',\'off\')\"> <font color=\"red\">Off</font> </a>';
+                        '<a href="#" onclick=\"xmlhttpGet(\'blink.jsp?mac=' + mac + '&blink=true\', \'Blinking turned on for Raspberry Pi ' + mac + '\');toggleBlink(\'' + mac + '\',\'off\')\"> <font color=\"red\">Off</font> </a>';
             } else {
                 element.innerHTML =
-                '<a href="#" onclick=\"xmlhttpGet(\'blink.jsp?mac=' + mac + '&blink=false\', \'Blinking turned off for Raspberry Pi ' + mac + '\');toggleBlink(\'' + mac + '\',\'on\')\"> <font color=\"green\">On</font> </a>';
+                        '<a href="#" onclick=\"xmlhttpGet(\'blink.jsp?mac=' + mac + '&blink=false\', \'Blinking turned off for Raspberry Pi ' + mac + '\');toggleBlink(\'' + mac + '\',\'on\')\"> <font color=\"green\">On</font> </a>';
             }
         }
 
@@ -112,10 +127,10 @@
             var element = document.getElementById(mac + '.reboot');
             if (reboot) {
                 element.innerHTML =
-                '<a href=\"#\" onclick=\"xmlhttpGet(\'reboot.jsp?mac=' + mac + '&reboot=true\', \'Rebooting cancelled for Raspberry Pi ' + mac + '\');toggleReboot(\'' + mac + '\', false)\"><font color=\"orange\">Rebooting</font></a>';
+                        '<a href=\"#\" onclick=\"xmlhttpGet(\'reboot.jsp?mac=' + mac + '&reboot=true\', \'Rebooting cancelled for Raspberry Pi ' + mac + '\');toggleReboot(\'' + mac + '\', false)\"><font color=\"orange\">Rebooting</font></a>';
             } else {
                 element.innerHTML =
-                '<a href=\"#\" onclick=\"xmlhttpGet(\'reboot.jsp?mac=' + mac + '&reboot=true\', \'Rebooting Raspberry Pi ' + mac + '\');toggleReboot(\'' + mac + '\', true)\"><font color=\"green\">Running</font></a>';
+                        '<a href=\"#\" onclick=\"xmlhttpGet(\'reboot.jsp?mac=' + mac + '&reboot=true\', \'Rebooting Raspberry Pi ' + mac + '\');toggleReboot(\'' + mac + '\', true)\"><font color=\"green\">Running</font></a>';
             }
         }
 
@@ -146,7 +161,7 @@
     <%
         if (autoRefresh) {
     %>
-    <META HTTP-EQUIV="Refresh" CONTENT="30; URL=index.jsp">
+    <META HTTP-EQUIV="Refresh" CONTENT="30; URL=index.jsp?refresh=on">
     <%
         }
     %>
@@ -156,236 +171,348 @@
         }
     </script>
 </head>
-<body>
-<h2>Raspberry Pi Control Center</h2>
-<hr/>
-<p>
-    <a href="controlpanel.jsp">Cluster Operations</a>
-    &nbsp;&nbsp;|&nbsp;&nbsp;
-    Auto Refresh:
-    <%
-        if (autoRefresh) {
-    %>
-    <a href="index.jsp?refresh=off">on</a>
-    <%
-    } else {
-    %>
-    <a href="index.jsp?refresh=on">off</a>
-    <%
-        }
-    %>
-</p>
+<body class="back-bg">
 
-<p>
+<!-- NAVBAR
+================================================== -->
+<div class="navbar-wrapper">
+    <!-- Wrap the .navbar in .container to center it within the absolutely positioned parent. -->
+    <div class="container">
 
-<div id="message_area" style="background: yellow"></div>
-</p>
-<table border="1" style="border-collapse: separate; border-spacing: 5px;" id="pi-table">
-    <tr style="background: rgba(131,118,113,0.71); color: black;">
-        <th>#</th>
-        <th>
-            <% if (!orderby.equals("ip")) {%>
-            <a href="index.jsp?orderby=ip">IP Address</a>
-            <% } else { %>
-            [<a href="index.jsp?orderby=ip">IP Address</a>]
-            <% } %>
-        </th>
-        <th>
-            <% if (!orderby.equals("mac")) {%>
-            <a href="index.jsp?orderby=mac">MAC Address</a>
-            <% } else { %>
-            [<a href="index.jsp?orderby=mac">MAC Address</a>]
-            <% } %>
-        </th>
-        <th>
-            <% if (!orderby.equals("zoneName")) {%>
-        <a href="index.jsp?orderby=zoneName">Zone</a>
-            <% } else { %>
-        [<a href="index.jsp?orderby=zoneName">Zone</a>]
-            <% } %>
-        </th>
-        <th>
-            <% if (!orderby.equals("label")) {%>
-            <a href="index.jsp?orderby=label">Label</a>
-            <% } else { %>
-            [<a href="index.jsp?orderby=label">Label</a>]
-            <% } %>
-        </th>
-        <th>
-            <% if (!orderby.equals("owner")) {%>
-            <a href="index.jsp?orderby=owner">Owner</a>
-            <% } else { %>
-            [<a href="index.jsp?orderby=owner">Owner</a>]
-            <% } %>
-        </th>
-        <th>
-            <% if (!orderby.equals("last_updated")) {%>
-            <a href="index.jsp?orderby=last_updated">Last Updated</a>
-            <% } else { %>
-            [<a href="index.jsp?orderby=last_updated">Last Updated</a>]
-            <% } %>
-        </th>
-        <th>
-            <% if (!orderby.equals("blink")) {%>
-            <a href="index.jsp?orderby=blink">Blink</a>
-            <% } else { %>
-            [<a href="index.jsp?orderby=blink">Blink</a>]
-            <% } %>
-        </th>
-        <th>
-            <% if (!orderby.equals("reboot")) {%>
-            <a href="index.jsp?orderby=reboot">Reboot</a>
-            <% } else { %>
-            [<a href="index.jsp?orderby=reboot">Reboot</a>]
-            <% } %>
-        </th>
-        <th>&nbsp;</th>
-    </tr>
-    <%
-        List<RaspberryPi> raspberryPis = Util.getRaspberryPis(orderby);
-        SimpleDateFormat sdf = new SimpleDateFormat("dd MMM yyyy HH:mm:ss zzz");
-        int i = 0;
-        ZonesRegistry zonesRegistry = ZonesRegistry.getInstance();
-        Map<String, Zone> zones = zonesRegistry.getZones();
-        for (RaspberryPi pi : raspberryPis) {
-            String mac = pi.getMacAddress();
-            String ip = pi.getIpAddress();
-            String label = pi.getLabel();
-            String zoneId = pi.getZoneID() != null ? pi.getZoneID() : "";
-            boolean selected = pi.isSelected();
-            long lastUpdated = pi.getLastUpdated();
-            i++;
-            String clazz = null;
-            if (System.currentTimeMillis() - lastUpdated > 3 * 60 * 1000) {
-                clazz = "inactive";
-            } else if (selected) {
-                clazz = "sel";
-            } else {
-                clazz = (i % 2 == 0) ? "d0" : "d1";
-            }
-    %>
-    <tr class="<%= clazz%>" id="<%= mac%>.row">
-        <td><%= i%>
-        </td>
-        <td><%= ip %>
-        </td>
-        <td><%= mac %>
-        <td>
-            <select id="<%= ip%>.zoneID" onchange="xmlhttpGet('updatezone.jsp?mac=<%= mac%>&zoneID=' + document.getElementById('<%= ip%>.zoneID').value,
-                    'Updated Zone of Raspberry Pi <%= mac%>')">
+        <div class="navbar navbar-inverse">
+            <div class="navbar-inner">
+                <!-- Responsive Navbar Part 1: Button for triggering responsive navbar (not covered in tutorial). Include responsive CSS to utilize. -->
+                <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </a>
+                <a class="brand" href="#"></a>
+                <!-- Responsive Navbar Part 2: Place all navbar contents you want collapsed withing .navbar-collapse.collapse. -->
+                <div class="nav-collapse collapse pull-right">
+                    <ul class="nav">
+                        <li class="active"><a href="index.jsp">Home</a></li>
+                        <li><a href="controlpanel.jsp">Cluster Operations</a></li>
 
-                <%  if(zoneId.isEmpty()){
-                %>
-                    <option value="UNASSIGNED" selected="true">-- UNASSIGNED -- </option>
-                <% } else { %>
-                    <option value="UNASSIGNED">-- UNASSIGNED -- </option>
+                    </ul>
+                </div><!--/.nav-collapse -->
+            </div><!-- /.navbar-inner -->
+        </div><!-- /.navbar -->
+
+    </div> <!-- /.container -->
+</div><!-- /.navbar-wrapper -->
+
+
+<div class="container-fluid content-section">
+<div class="row-fluid">
+<div class="span12">
+<div class="heading-back">
+    <div class="container-fluid">
+        <div class="row-fluid">
+            <div class="span8"><h1>Raspberry Pi Control Center</h1></div>
+            <div class="span3">
                 <%
-                }
-                    for (Map.Entry<String, Zone> entry : zones.entrySet()) {
-                    if (zoneId.equals(entry.getKey())) {
+                    if (autoRefresh) {
                 %>
-                <option value="<%= entry.getKey()%>" selected="true"><%= entry.getValue().getName()%>
-                </option>
-                <% } else { %>
-                <option value="<%= entry.getKey()%>"><%= entry.getValue().getName()%>
-                </option>
+                <a class="pull-right auto-refresh" href="index.jsp?refresh=off">
+                    Auto Refresh (on)
+                    <i class="icon-refresh-on"></i>
+                </a>
                 <%
-                        }
+                } else {
+                %>
+                <a class="pull-right auto-refresh" href="index.jsp?refresh=on">
+                    Auto Refresh (off)
+                    <i class="icon-refresh-off"></i>
+                </a>
+                <%
                     }
                 %>
-            </select>
-        </td>
-        <td>
-            <input type="text" size="20" id="<%= ip%>.label" value="<%= label%>"/>
-            <a href="#"
-               onclick="xmlhttpGet('updatelabel.jsp?mac=<%= mac%>&label=' + document.getElementById('<%= ip%>.label').value,
-                       'Updated label of Raspberry Pi <%= mac%>')">Apply</a>
-        </td>
-        <td>
-            <%
-                if (pi.getReservedFor() == null || pi.getReservedFor().isEmpty()) {
-            %>
-            <input type="text" size="20" name="reservedFor" id="mac<%= mac%>"/>
-            <a href="#"
-               onclick="reservePi(document.getElementById('mac<%= mac%>').value, '<%= mac%>')">Reserve</a>
-            <%
-            } else {
-            %>
-            <input type="text" size="20" name="reservedFor" id="mac<%= mac%>"
-                   value="<%= pi.getReservedFor()%>" disabled="true"/>
-            <a href="releasepi.jsp?mac=<%= mac%>">Release</a>
-            <%
-                }
-            %>
-        </td>
-        <td>
-            <%= sdf.format(new Date(lastUpdated))%>
-        </td>
-        <td id="<%= mac%>.blink">
-            <%
-                if (pi.isBlink()) {
-            %>
-            <a href="#"
-               onclick="xmlhttpGet('blink.jsp?mac=<%= mac%>&blink=false',
-                       'Blinking turned off for Raspberry Pi <%= mac%>');
-                       toggleBlink('<%= mac%>','on')">
-                <font color="green">On</font>
-            </a>
-            <%
-            } else {
-            %>
-            <a href="#"
-               onclick="xmlhttpGet('blink.jsp?mac=<%= mac%>&blink=true',
-                       'Blinking turned on for Raspberry Pi <%= mac%>');
-                       toggleBlink('<%= mac%>','off')">
-                <font color="red">Off</font>
-            </a>
-            <%
-                }
-            %>
-        </td>
-        <td id="<%= mac%>.reboot">
-            <%
-                if (pi.isReboot()) {
-            %>
-            <a href="#"
-               onclick="xmlhttpGet('reboot.jsp?mac=<%= mac%>&reboot=false',
-                       'Rebooting cancelled for Raspberry Pi <%= mac%>');
-                       toggleReboot('<%= mac%>', false)">
-                <font color="orange">Rebooting</font>
-            </a>
-            <%
-            } else {
-            %>
-            <a href="#"
-               onclick="xmlhttpGet('reboot.jsp?mac=<%= mac%>&reboot=true',
-                       'Rebooting Raspberry Pi <%= mac%>');
-                       toggleReboot('<%= mac%>', true)">
-                <font color="green">Running</font>
-            </a>
-            <%
-                }
-            %>
-        </td>
-        <td>
-            <a href="#" onclick="deletePi('<%= mac%>')"><img src="../images/delete.png" alt="Delete"
-                                                             width="16px" height="16px"/></a>
-            &nbsp;
-            <%
-                if (selected) {
-            %>
-            <a href="selectpi?mac=<%= mac%>&selected=false"><img src="../images/clear.png"
-                                                                 alt="Deselect" width="16px"
-                                                                 height="16px"/></a>
-            <%
-                }
-            %>
-        </td>
-    </tr>
-    <%
+
+
+            </div>
+        </div>
+    </div>
+
+
+</div>
+<div class="white-back">
+<div id="message_area" style="background: yellow"></div>
+
+<table class="table table-striped table-bordered" id="pi-table">
+<thead>
+<tr style="background: rgba(131,118,113,0.71); color: black;">
+    <th>#</th>
+    <th>
+        <% if (!orderby.equals("ip")) {%>
+        <a href="index.jsp?orderby=ip">IP Address</a>
+        <% } else { %>
+        [<a href="index.jsp?orderby=ip">IP Address</a>]
+        <% } %>
+    </th>
+    <th>
+        <% if (!orderby.equals("mac")) {%>
+        <a href="index.jsp?orderby=mac">MAC Address</a>
+        <% } else { %>
+        [<a href="index.jsp?orderby=mac">MAC Address</a>]
+        <% } %>
+    </th>
+    <th>
+        <% if (!orderby.equals("zone")) {%>
+        <a href="index.jsp?orderby=zone">Zone</a>
+        <% } else { %>
+        [<a href="index.jsp?orderby=zone">Zone</a>]
+        <% } %>
+    </th>
+    <th>
+        <% if (!orderby.equals("rack")) {%>
+        <a href="index.jsp?orderby=rack">Rack</a>
+        <% } else { %>
+        [<a href="index.jsp?orderby=rack">Rack</a>]
+        <% } %>
+    </th>
+    <th>
+        <% if (!orderby.equals("pi")) {%>
+        <a href="index.jsp?orderby=pi">Pi</a>
+        <% } else { %>
+        [<a href="index.jsp?orderby=pi">Pi</a>]
+        <% } %>
+    </th>
+    <th>
+        <% if (!orderby.equals("label")) {%>
+        <a href="index.jsp?orderby=label">Label</a>
+        <% } else { %>
+        [<a href="index.jsp?orderby=label">Label</a>]
+        <% } %>
+    </th>
+    <th>
+        <% if (!orderby.equals("load_avg")) {%>
+        <a href="index.jsp?orderby=load_avg">Load Avg.</a>
+        <% } else { %>
+        [<a href="index.jsp?orderby=load_avg">Load Avg.</a>]
+        <% } %>
+    </th>
+    <th>
+        <% if (!orderby.equals("free_mem")) {%>
+        <a href="index.jsp?orderby=free_mem">Free Memory</a>
+        <% } else { %>
+        [<a href="index.jsp?orderby=free_mem">Free Memory</a>]
+        <% } %>
+    </th>
+    <th>
+        <% if (!orderby.equals("owner")) {%>
+        <a href="index.jsp?orderby=owner">Owner</a>
+        <% } else { %>
+        [<a href="index.jsp?orderby=owner">Owner</a>]
+        <% } %>
+    </th>
+    <th>
+        <% if (!orderby.equals("last_updated")) {%>
+        <a href="index.jsp?orderby=last_updated">Last Updated</a>
+        <% } else { %>
+        [<a href="index.jsp?orderby=last_updated">Last Updated</a>]
+        <% } %>
+    </th>
+    <th>
+        <% if (!orderby.equals("blink")) {%>
+        <a href="index.jsp?orderby=blink">Blink</a>
+        <% } else { %>
+        [<a href="index.jsp?orderby=blink">Blink</a>]
+        <% } %>
+    </th>
+    <th>
+        <% if (!orderby.equals("reboot")) {%>
+        <a href="index.jsp?orderby=reboot">Reboot</a>
+        <% } else { %>
+        [<a href="index.jsp?orderby=reboot">Reboot</a>]
+        <% } %>
+    </th>
+    <th>&nbsp;</th>
+</tr>
+</thead>
+<tbody>
+<%
+    List<RaspberryPi> raspberryPis = Util.getRaspberryPis(orderby);
+    SimpleDateFormat sdf = new SimpleDateFormat("dd MMM yyyy HH:mm:ss zzz");
+    int i = 0;
+    ZonesRegistry zonesRegistry = ZonesRegistry.getInstance();
+    Map<String, Zone> zones = zonesRegistry.getZones();
+    for (RaspberryPi pi : raspberryPis) {
+        String mac = pi.getMacAddress();
+        String ip = pi.getIpAddress();
+        String rack = pi.getRack();
+        String piId = pi.getId();
+        String label = pi.getLabel();
+        String zoneId = pi.getZoneID() != null ? pi.getZoneID() : "";
+        boolean selected = pi.isSelected();
+        long lastUpdated = pi.getLastUpdated();
+        i++;
+        String clazz;
+        if (System.currentTimeMillis() - lastUpdated > 3 * 60 * 1000) {
+            clazz = "inactive";
+        } else if (selected) {
+            clazz = "sel";
+        } else {
+            clazz = (i % 2 == 0) ? "d0" : "d1";
         }
-    %>
+%>
+<tr class="<%= clazz%>" id="<%= mac%>.row">
+    <td><%= i%>
+    </td>
+    <td><%= ip %>
+    </td>
+    <td><%= mac %>
+    </td>
+    <td>
+        <select id="<%= ip%>.zoneID" onchange="xmlhttpGet('updatezone.jsp?mac=<%= mac%>&zoneID=' + document.getElementById('<%= ip%>.zoneID').value,
+                'Updated Zone of Raspberry Pi <%= mac%>')">
+
+            <%  if(zoneId.isEmpty()){
+            %>
+            <option value="UNASSIGNED" selected="true">-- UNASSIGNED -- </option>
+            <% } else { %>
+            <option value="UNASSIGNED">-- UNASSIGNED -- </option>
+            <%
+                }
+                for (Map.Entry<String, Zone> entry : zones.entrySet()) {
+                    if (zoneId.equals(entry.getKey())) {
+            %>
+            <option value="<%= entry.getKey()%>" selected="true"><%= entry.getValue().getName()%>
+            </option>
+            <% } else { %>
+            <option value="<%= entry.getKey()%>"><%= entry.getValue().getName()%>
+            </option>
+            <%
+                    }
+                }
+            %>
+        </select>
+    </td>
+    <td>
+        <input type="text" size="5" id="<%= ip%>.rack" value="<%= rack%>"/>
+        <a href="#"
+           onclick="xmlhttpGet('updatepi.jsp?mac=<%= mac%>&rack=' + document.getElementById('<%= ip%>.rack').value,
+                   'Updated rack ID of Raspberry Pi <%= mac%>')">Apply</a>
+    </td>
+    <td>
+        <input type="text" size="5" id="<%= ip%>.piId" value="<%= piId%>"/>
+        <a href="#"
+           onclick="xmlhttpGet('updatepi.jsp?mac=<%= mac%>&pi=' + document.getElementById('<%= ip%>.piId').value,
+                   'Updated ID of Raspberry Pi <%= mac%>')">Apply</a>
+    </td>
+    <td>
+        <input type="text" size="20" id="<%= ip%>.label" value="<%= label%>"/>
+        <a href="#"
+           onclick="xmlhttpGet('updatepi.jsp?mac=<%= mac%>&label=' + document.getElementById('<%= ip%>.label').value,
+                   'Updated label of Raspberry Pi <%= mac%>')">Apply</a>
+    </td>
+    <td>...</td>
+    <td>...</td>
+    <td>
+        <%
+            if (pi.getReservedFor() == null || pi.getReservedFor().isEmpty()) {
+        %>
+        <input type="text" size="10" name="reservedFor" id="mac<%= mac%>"/>
+        <a href="#"
+           onclick="reservePi(document.getElementById('mac<%= mac%>').value, '<%= mac%>')">Reserve</a>
+        <%
+        } else {
+        %>
+        <input type="text" size="10" name="reservedFor" id="mac<%= mac%>"
+               value="<%= pi.getReservedFor()%>" disabled="true"/>
+        <a href="releasepi.jsp?mac=<%= mac%>">Release</a>
+        <%
+            }
+        %>
+    </td>
+    <td>
+        <%= sdf.format(new Date(lastUpdated))%>
+    </td>
+    <td id="<%= mac%>.blink">
+        <%
+            if (pi.isBlink()) {
+        %>
+        <a href="#"
+           onclick="xmlhttpGet('blink.jsp?mac=<%= mac%>&blink=false',
+                   'Blinking turned off for Raspberry Pi <%= mac%>');
+                   toggleBlink('<%= mac%>','on')">
+            <font color="green">On</font>
+        </a>
+        <%
+        } else {
+        %>
+        <a href="#"
+           onclick="xmlhttpGet('blink.jsp?mac=<%= mac%>&blink=true',
+                   'Blinking turned on for Raspberry Pi <%= mac%>');
+                   toggleBlink('<%= mac%>','off')">
+            <font color="red">Off</font>
+        </a>
+        <%
+            }
+        %>
+    </td>
+    <td id="<%= mac%>.reboot">
+        <%
+            if (pi.isReboot()) {
+        %>
+        <a href="#"
+           onclick="xmlhttpGet('reboot.jsp?mac=<%= mac%>&reboot=false',
+                   'Rebooting cancelled for Raspberry Pi <%= mac%>');
+                   toggleReboot('<%= mac%>', false)">
+            <font color="orange">Rebooting</font>
+        </a>
+        <%
+        } else {
+        %>
+        <a href="#"
+           onclick="xmlhttpGet('reboot.jsp?mac=<%= mac%>&reboot=true',
+                   'Rebooting Raspberry Pi <%= mac%>');
+                   toggleReboot('<%= mac%>', true)">
+            <font color="green">Running</font>
+        </a>
+        <%
+            }
+        %>
+    </td>
+    <td>
+        <a href="#" onclick="deletePi('<%= mac%>')"><img src="images/delete.png" alt="Delete"
+                                                         width="16px" height="16px"/></a>
+        &nbsp;
+        <%
+            if (selected) {
+        %>
+        <a href="selectpi?mac=<%= mac%>&selected=false"><img src="images/clear.png"
+                                                             alt="Deselect" width="16px"
+                                                             height="16px"/></a>
+        <%
+            }
+        %>
+    </td>
+</tr>
+<%
+    }
+%>
+</tbody>
 </table>
+</div>
+
+</div>
+</div>
+</div>
+
+
+
+<div class="container-fluid marketing">
+    <!-- FOOTER -->
+    <footer>
+        <p class="pull-right"><a href="#">Back to top</a></p>
+        <p>&copy; 2014 WSO2</p>
+    </footer>
+
+</div><!-- /.container -->
+
+
+
 </body>
 </html>
 

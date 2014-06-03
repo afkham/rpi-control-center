@@ -31,6 +31,24 @@ public class RaspberryPi {
     private boolean reboot;
     private boolean selected;
     private String zoneID;
+    private String rack;
+    private String id;
+
+    public String getRack() {
+        return rack;
+    }
+
+    public void setRack(String rack) {
+        this.rack = rack;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public RaspberryPi() {
     }
