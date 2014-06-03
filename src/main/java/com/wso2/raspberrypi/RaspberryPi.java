@@ -30,6 +30,7 @@ public class RaspberryPi {
     private boolean blink;
     private boolean reboot;
     private boolean selected;
+    private Zone zone;
 
     public RaspberryPi() {
     }
@@ -102,5 +103,13 @@ public class RaspberryPi {
 
     public void setSelected(boolean selected) {
         this.selected = selected;
+    }
+
+    public Zone getZone() {
+        return zone;
+    }
+
+    public void setZone(Zone zone) {
+        this.zone = zone;
     }
 }

@@ -1,8 +1,11 @@
 <%@page import="com.wso2.raspberrypi.RaspberryPi" %>
+<%@page import="com.wso2.raspberrypi.ZonesRegistry" %>
 <%@page import="com.wso2.raspberrypi.Util" %>
 <%@ page import="java.text.SimpleDateFormat" %>
 <%@ page import="java.util.Date" %>
 <%@ page import="java.util.List" %>
+<%@ page import="com.wso2.raspberrypi.Zone" %>
+<%@ page import="java.util.Map" %>
 
 
 <%
@@ -195,6 +198,13 @@
             <% } %>
         </th>
         <th>
+            <% if (!orderby.equals("zoneName")) {%>
+        <a href="index.jsp?orderby=zoneName">Zone</a>
+            <% } else { %>
+        [<a href="index.jsp?orderby=zoneName">Zone</a>]
+            <% } %>
+        </th>
+        <th>
             <% if (!orderby.equals("label")) {%>
             <a href="index.jsp?orderby=label">Label</a>
             <% } else { %>
@@ -235,10 +245,13 @@
         List<RaspberryPi> raspberryPis = Util.getRaspberryPis(orderby);
         SimpleDateFormat sdf = new SimpleDateFormat("dd MMM yyyy HH:mm:ss zzz");
         int i = 0;
+        ZonesRegistry zonesRegistry = ZonesRegistry.getInstance();
+        Map<String, Zone> zones = zonesRegistry.getZones();
         for (RaspberryPi pi : raspberryPis) {
             String mac = pi.getMacAddress();
             String ip = pi.getIpAddress();
             String label = pi.getLabel();
+            String zoneId = pi.getZone().getId();
             boolean selected = pi.isSelected();
             long lastUpdated = pi.getLastUpdated();
             i++;
@@ -257,6 +270,15 @@
         <td><%= ip %>
         </td>
         <td><%= mac %>
+        <td>
+        <select>
+        <% for (Map.Entry<String, Zone> entry : zones.entrySet()) {
+        %>
+           <option value="<%= entry.getKey()%>"><%= entry.getValue().getName()%></option>
+        <%
+        }
+        %>
+        </select>
         </td>
         <td>
             <input type="text" size="20" id="<%= ip%>.label" value="<%= label%>"/>

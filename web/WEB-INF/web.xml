@@ -6,6 +6,11 @@
          version="2.5">
 
     <servlet>
+        <servlet-name>MainServlet</servlet-name>
+        <servlet-class>com.wso2.raspberrypi.MainServlet</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+    <servlet>
         <servlet-name>ClusterStateServlet</servlet-name>
         <servlet-class>com.wso2.raspberrypi.GetClusterStateServlet</servlet-class>
     </servlet>
