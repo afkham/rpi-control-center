@@ -43,7 +43,7 @@ public class APICall {
     private static String tokenEndpoint = "http://gateway.apicloud.cloudpreview.wso2.com:8280/token";
 
     public static void registerDevice(String deviceID, String zoneID){
-        String url = "http://gateway.apicloud.cloudpreview.wso2.com:8280/t/indikas.com/wso2coniot/1.0.0/conferences/2/iot/scannerZones/byScannerUUID";
+        String url = "https://gateway.apicloud.cloudpreview.wso2.com:8243/t/indikas.com/wso2coniot/1.0.0/conferences/2/iot/scannerZones/byScannerUUID";
         Token token = getToken();
         if (token != null) {
             HttpClient httpClient = new HttpClient();
@@ -70,7 +70,7 @@ public class APICall {
             HttpClient httpClient = new HttpClient();
             try {
                 HttpResponse httpResponse =
-                        httpClient.doGet("http://gateway.apicloud.cloudpreview.wso2.com:8280/t/indikas.com/wso2coniot/1.0.0/conferences/2/iot/zones",
+                        httpClient.doGet("https://gateway.apicloud.cloudpreview.wso2.com:8243/t/indikas.com/wso2coniot/1.0.0/conferences/2/iot/zones",
                                 "Bearer " + token.getAccessToken());
                 int statusCode = httpResponse.getStatusLine().getStatusCode();
                 if(statusCode == 200){

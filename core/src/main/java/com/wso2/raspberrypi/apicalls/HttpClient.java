@@ -22,19 +22,11 @@ import org.apache.http.HttpEntityEnclosingRequest;
 import org.apache.http.HttpHeaders;
 import org.apache.http.HttpRequest;
 import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpRequestRetryHandler;
 import org.apache.http.client.methods.*;
-import org.apache.http.conn.scheme.PlainSocketFactory;
-import org.apache.http.conn.scheme.Scheme;
-import org.apache.http.conn.scheme.SchemeRegistry;
-import org.apache.http.conn.scheme.SocketFactory;
 import org.apache.http.entity.ContentProducer;
 import org.apache.http.entity.EntityTemplate;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager;
-import org.apache.http.params.HttpConnectionParams;
-import org.apache.http.params.HttpParams;
-import org.apache.http.protocol.HttpContext;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClientBuilder;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -42,12 +34,10 @@ import java.io.OutputStream;
 
 public class HttpClient {
 
-    private ThreadSafeClientConnManager connManager;
-    private DefaultHttpClient client;
+    private CloseableHttpClient client;
 
     public HttpClient() {
-        connManager = getHTTPConnectionManager();
-        client = configureHTTPClient(connManager);
+        client =  HttpClientBuilder.create().build();
     }
 
     public HttpResponse doPost(String url, String token, final String payload, String contentType) throws IOException {
@@ -115,30 +105,6 @@ public class HttpClient {
         HttpUriRequest request = new HttpDelete(url);
         addSecurityHeaders(request, token);
         return client.execute(request);
-    }
-
-    private DefaultHttpClient configureHTTPClient(
-            ThreadSafeClientConnManager connManager) {
-        connManager.setDefaultMaxPerRoute(1000);
-        DefaultHttpClient client = new DefaultHttpClient(connManager);
-        HttpParams params = client.getParams();
-        HttpConnectionParams.setConnectionTimeout(params, 30000);
-        HttpConnectionParams.setSoTimeout(params, 30000);
-        client.setHttpRequestRetryHandler(new HttpRequestRetryHandler() {
-            public boolean retryRequest(IOException e, int i,
-                                        HttpContext httpContext) {
-                return false;
-            }
-        });
-        return client;
-    }
-
-    private ThreadSafeClientConnManager getHTTPConnectionManager() {
-        SchemeRegistry supportedSchemes = new SchemeRegistry();
-        SocketFactory sf = PlainSocketFactory.getSocketFactory();
-        supportedSchemes.register(new Scheme("http", sf, 80));
-
-        return new ThreadSafeClientConnManager(supportedSchemes);
     }
 
     private void addSecurityHeaders(HttpRequest request, String token) {
