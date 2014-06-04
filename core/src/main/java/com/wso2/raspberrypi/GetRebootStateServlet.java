@@ -37,7 +37,7 @@ public class GetRebootStateServlet extends HttpServlet {
         writer.append(String.valueOf(pi.isReboot()));
         writer.flush();
         writer.close();
-        if(pi.isReboot()){
+        if (pi.isReboot()) {
             pi.setReboot(false);
             Util.updateRaspberryPi(pi);
         }

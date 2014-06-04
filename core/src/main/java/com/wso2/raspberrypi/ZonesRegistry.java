@@ -30,12 +30,12 @@ public class ZonesRegistry {
     private static ZonesRegistry instance = new ZonesRegistry();
     private Map<String, Zone> zones = new HashMap<String, Zone>();
 
-    public static ZonesRegistry getInstance() {
-        return instance;
-    }
-
     private ZonesRegistry() {
 
+    }
+
+    public static ZonesRegistry getInstance() {
+        return instance;
     }
 
     public void addZones(List<Zone> zones) {

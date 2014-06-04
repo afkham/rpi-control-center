@@ -42,7 +42,7 @@ public class APICall {
     private static String consumerSecret = "yXdCdk4nXCv3kHVf1_u3fA74jRYa";
     private static String tokenEndpoint = "http://gateway.apicloud.cloudpreview.wso2.com:8280/token";
 
-    public static void registerDevice(String deviceID, String zoneID){
+    public static void registerDevice(String deviceID, String zoneID) {
         String url = "https://gateway.apicloud.cloudpreview.wso2.com:8243/t/indikas.com/wso2coniot/1.0.0/conferences/2/iot/scannerZones/byScannerUUID";
         Token token = getToken();
         if (token != null) {
@@ -54,7 +54,7 @@ public class APICall {
                 HttpResponse httpResponse =
                         httpClient.doPost(url, "Bearer " + token.getAccessToken(), json.toJSONString(), "application/json");
                 int statusCode = httpResponse.getStatusLine().getStatusCode();
-                if(statusCode != 200){
+                if (statusCode != 200) {
                     log.error("Device to Zone registration failed. HTTP Status Code:" + statusCode);
                 }
             } catch (IOException e) {
@@ -73,7 +73,7 @@ public class APICall {
                         httpClient.doGet("https://gateway.apicloud.cloudpreview.wso2.com:8243/t/indikas.com/wso2coniot/1.0.0/conferences/2/iot/zones",
                                 "Bearer " + token.getAccessToken());
                 int statusCode = httpResponse.getStatusLine().getStatusCode();
-                if(statusCode == 200){
+                if (statusCode == 200) {
                     JSONParser parser = new JSONParser();
                     JSONArray jsonArray = (JSONArray) parser.parse(httpClient.getResponsePayload(httpResponse));
                     for (int i = 0; i < jsonArray.size(); i++) {

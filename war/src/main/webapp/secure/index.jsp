@@ -239,6 +239,8 @@
 </div>
 <div class="white-back">
 <div id="message_area" style="background: yellow"></div>
+<br/>
+<br/>
 
 <table class="table table-striped table-bordered" id="pi-table">
 <thead>
@@ -286,6 +288,8 @@
         [<a href="index.jsp?orderby=label">Label</a>]
         <% } %>
     </th>--%>
+    <th>CK</th>
+    <th>CS</th>
     <th>
         <% if (!orderby.equals("load_avg")) {%>
         <a href="index.jsp?orderby=load_avg">Load Avg.</a>
@@ -344,6 +348,8 @@
         String rack = pi.getRack();
         String piId = pi.getId();
         String label = pi.getLabel();
+        String ck = pi.getConsumerKey();
+        String cs = pi.getConsumerSecret();
         String zoneId = pi.getZoneID() != null ? pi.getZoneID() : "";
         boolean selected = pi.isSelected();
         long lastUpdated = pi.getLastUpdated();
@@ -358,14 +364,11 @@
         }
 %>
 <tr class="<%= clazz%>" id="<%= mac%>.row">
-    <td><%= i%>
-    </td>
-    <td><%= ip %>
-    </td>
-    <td><%= mac %>
-    </td>
+    <td><%= i%></td>
+    <td><%= ip %></td>
+    <td><%= mac %></td>
     <td>
-        <select id="<%= ip%>.zoneID" onchange="xmlhttpGet('updatezone.jsp?mac=<%= mac%>&zoneID=' + document.getElementById('<%= ip%>.zoneID').value,
+        <select id="<%= ip%>.zoneID" onchange="xmlhttpGet('updatepi.jsp?mac=<%= mac%>&zoneID=' + document.getElementById('<%= ip%>.zoneID').value,
                 'Updated Zone of Raspberry Pi <%= mac%>')">
 
             <%  if(zoneId.isEmpty()){
@@ -388,6 +391,18 @@
                 }
             %>
         </select>
+    </td>
+    <td>
+        <input type="text" size="20" id="<%= ip%>.ck" value="<%= ck%>"/>
+        <a href="#"
+           onclick="xmlhttpGet('updatepi.jsp?mac=<%= mac%>&ck=' + document.getElementById('<%= ip%>.ck').value,
+                   'Updated Consumer Key of Raspberry Pi <%= mac%>')">Apply</a>
+    </td>
+    <td>
+        <input type="text" size="20" id="<%= ip%>.cs" value="<%= cs%>"/>
+        <a href="#"
+           onclick="xmlhttpGet('updatepi.jsp?mac=<%= mac%>&cs=' + document.getElementById('<%= ip%>.cs').value,
+                   'Updated Consumer Secret of Raspberry Pi <%= mac%>')">Apply</a>
     </td>
     <%--<td>
         <input type="text" size="5" id="<%= ip%>.rack" value="<%= rack%>"/>

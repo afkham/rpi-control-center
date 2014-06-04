@@ -22,18 +22,18 @@ package com.wso2.raspberrypi;
  */
 public class RaspberryPiException extends Exception {
     public RaspberryPiException() {
-        super();    
+        super();
     }
 
     public RaspberryPiException(String message) {
-        super(message);    
+        super(message);
     }
 
     public RaspberryPiException(String message, Throwable cause) {
-        super(message, cause);    
+        super(message, cause);
     }
 
     public RaspberryPiException(Throwable cause) {
-        super(cause);    
+        super(cause);
     }
 }

@@ -36,6 +36,15 @@ public class RaspberryPi {
     private String rack;
     private String id;
 
+    public RaspberryPi() {
+    }
+
+    public RaspberryPi(String macAddress, String ipAddress, Long lastUpdated) {
+        this.macAddress = macAddress;
+        this.ipAddress = ipAddress;
+        this.lastUpdated = lastUpdated;
+    }
+
     public String getRack() {
         return rack;
     }
@@ -50,15 +59,6 @@ public class RaspberryPi {
 
     public void setId(String id) {
         this.id = id;
-    }
-
-    public RaspberryPi() {
-    }
-
-    public RaspberryPi(String macAddress, String ipAddress, Long lastUpdated) {
-        this.macAddress = macAddress;
-        this.ipAddress = ipAddress;
-        this.lastUpdated = lastUpdated;
     }
 
     public String getMacAddress() {

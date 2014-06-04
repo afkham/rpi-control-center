@@ -35,7 +35,7 @@ public class SelectPiServlet extends HttpServlet {
         Boolean selected = Boolean.valueOf(req.getParameter("selected"));
         pi.setSelected(selected);
         Util.updateRaspberryPi(pi);
-        if(!selected){
+        if (!selected) {
             resp.sendRedirect("index.jsp");
         }
     }

@@ -39,8 +39,8 @@ public class GetSelectedPisServlet extends HttpServlet {
         for (RaspberryPi pi : pis) {
             result.append("{\"mac\": \"").append(pi.getMacAddress()).append("\"}");
             i++;
-            if(i != pis.size()) {
-               result.append(",");
+            if (i != pis.size()) {
+                result.append(",");
             }
         }
         result.append("]}");

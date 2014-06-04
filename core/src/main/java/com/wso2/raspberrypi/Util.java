@@ -18,6 +18,8 @@
 package com.wso2.raspberrypi;
 
 import org.apache.commons.dbcp.BasicDataSource;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -30,10 +32,12 @@ import java.util.List;
  * TODO: class description
  */
 public class Util {
+    private static Log log = LogFactory.getLog(Util.class);
+
     public static List<RaspberryPi> getRaspberryPis(String orderBy) {
         System.out.println("Listing registered Raspberry Pis...");
 
-        if(orderBy == null){
+        if (orderBy == null) {
             orderBy = "ip";
         }
         List<RaspberryPi> results = new ArrayList<RaspberryPi>();
@@ -53,7 +57,7 @@ public class Util {
                 results.add(pi);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            log.error("", e);
         } finally {
             try {
                 if (dbConnection != null) {
@@ -66,7 +70,7 @@ public class Util {
                     rs.close();
                 }
             } catch (SQLException e) {
-                e.printStackTrace();
+                log.error("", e);
             }
         }
         return results;
@@ -107,7 +111,7 @@ public class Util {
                 break;
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            log.error("", e);
         } finally {
             try {
                 if (dbConnection != null) {
@@ -120,7 +124,7 @@ public class Util {
                     rs.close();
                 }
             } catch (SQLException e) {
-                e.printStackTrace();
+                log.error("", e);
             }
         }
         return pi;
@@ -150,7 +154,7 @@ public class Util {
                 prepStmt.execute();
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            log.error("", e);
         } finally {
             try {
                 if (dbConnection != null) {
@@ -163,7 +167,7 @@ public class Util {
                     rs.close();
                 }
             } catch (SQLException e) {
-                e.printStackTrace();
+                log.error("", e);
             }
         }
     }
@@ -185,7 +189,7 @@ public class Util {
                     dbConnection.prepareStatement("DELETE FROM RASP_PI");
             prepStmt.execute();
         } catch (SQLException e) {
-            e.printStackTrace();
+            log.error("", e);
         } finally {
             try {
                 if (dbConnection != null) {
@@ -195,7 +199,7 @@ public class Util {
                     prepStmt.close();
                 }
             } catch (SQLException e) {
-                e.printStackTrace();
+                log.error("", e);
             }
         }
     }
@@ -224,7 +228,7 @@ public class Util {
                 prepStmt.execute();
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            log.error("", e);
         } finally {
             try {
                 if (dbConnection != null) {
@@ -237,7 +241,7 @@ public class Util {
                     rs.close();
                 }
             } catch (SQLException e) {
-                e.printStackTrace();
+                log.error("", e);
             }
         }
     }
@@ -253,7 +257,7 @@ public class Util {
                     dbConnection.prepareStatement("UPDATE RASP_PI SET owner='' where mac='" + macAddress + "'");
             prepStmt.execute();
         } catch (SQLException e) {
-            e.printStackTrace();
+            log.error("", e);
         } finally {
             try {
                 if (dbConnection != null) {
@@ -263,7 +267,7 @@ public class Util {
                     prepStmt.close();
                 }
             } catch (SQLException e) {
-                e.printStackTrace();
+                log.error("", e);
             }
         }
     }
@@ -285,7 +289,7 @@ public class Util {
                 results.add(new KVPair(rs.getString("k"), rs.getString("v")));
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            log.error("", e);
         } finally {
             try {
                 if (dbConnection != null) {
@@ -298,7 +302,7 @@ public class Util {
                     rs.close();
                 }
             } catch (SQLException e) {
-                e.printStackTrace();
+                log.error("", e);
             }
         }
         return results;
@@ -320,7 +324,7 @@ public class Util {
                 value = rs.getString("v");
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            log.error("", e);
         } finally {
             try {
                 if (dbConnection != null) {
@@ -333,7 +337,7 @@ public class Util {
                     rs.close();
                 }
             } catch (SQLException e) {
-                e.printStackTrace();
+                log.error("", e);
             }
         }
         return value;
@@ -359,7 +363,7 @@ public class Util {
                     dbConnection.prepareStatement("UPDATE KV_PAIR SET v='" + value + "' where k='" + key + "'");
             prepStmt.execute();
         } catch (SQLException e) {
-            e.printStackTrace();
+            log.error("", e);
         } finally {
             try {
                 if (dbConnection != null) {
@@ -369,7 +373,7 @@ public class Util {
                     prepStmt.close();
                 }
             } catch (SQLException e) {
-                e.printStackTrace();
+                log.error("", e);
             }
         }
     }
@@ -382,16 +386,16 @@ public class Util {
             dbConnection = ds.getConnection();
             prepStmt =
                     dbConnection.prepareStatement("UPDATE RASP_PI SET blink=" + raspberryPi.isBlink() +
-                                                  ",reboot=" + raspberryPi.isReboot() +
-                                                  ",selected=" + raspberryPi.isSelected() +
-                                                  ",label='" + raspberryPi.getLabel() +"'" +
-                                                  ",consumer_key='" + raspberryPi.getConsumerKey() +"'" +
-                                                  ",consumer_secret='" + raspberryPi.getConsumerSecret() +"'" +
-                                                  ",zone='" + raspberryPi.getZoneID() +"'" +
-                                                  " where mac='" + raspberryPi.getMacAddress() + "'");
+                            ",reboot=" + raspberryPi.isReboot() +
+                            ",selected=" + raspberryPi.isSelected() +
+                            ",label='" + raspberryPi.getLabel() + "'" +
+                            ",consumer_key='" + raspberryPi.getConsumerKey() + "'" +
+                            ",consumer_secret='" + raspberryPi.getConsumerSecret() + "'" +
+                            ",zone='" + raspberryPi.getZoneID() + "'" +
+                            " where mac='" + raspberryPi.getMacAddress() + "'");
             prepStmt.execute();
         } catch (SQLException e) {
-            e.printStackTrace();
+            log.error("", e);
         } finally {
             try {
                 if (dbConnection != null) {
@@ -401,7 +405,7 @@ public class Util {
                     prepStmt.close();
                 }
             } catch (SQLException e) {
-                e.printStackTrace();
+                log.error("", e);
             }
         }
     }
@@ -417,7 +421,7 @@ public class Util {
                     dbConnection.prepareStatement("DELETE FROM RASP_PI WHERE mac='" + mac + "'");
             prepStmt.execute();
         } catch (SQLException e) {
-            e.printStackTrace();
+            log.error("", e);
         } finally {
             try {
                 if (dbConnection != null) {
@@ -427,7 +431,7 @@ public class Util {
                     prepStmt.close();
                 }
             } catch (SQLException e) {
-                e.printStackTrace();
+                log.error("", e);
             }
         }
     }
@@ -450,7 +454,7 @@ public class Util {
                 results.add(pi);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            log.error("", e);
         } finally {
             try {
                 if (dbConnection != null) {
@@ -463,7 +467,7 @@ public class Util {
                     rs.close();
                 }
             } catch (SQLException e) {
-                e.printStackTrace();
+                log.error("", e);
             }
         }
         return results;

@@ -18,6 +18,8 @@
  */
 package com.wso2.raspberrypi.apicalls;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.http.HttpEntityEnclosingRequest;
 import org.apache.http.HttpHeaders;
 import org.apache.http.HttpRequest;
@@ -35,9 +37,10 @@ import java.io.OutputStream;
 public class HttpClient {
 
     private CloseableHttpClient client;
+    private Log log = LogFactory.getLog(HttpClient.class);
 
     public HttpClient() {
-        client =  HttpClientBuilder.create().build();
+        client = HttpClientBuilder.create().build();
     }
 
     public HttpResponse doPost(String url, String token, final String payload, String contentType) throws IOException {
@@ -75,7 +78,7 @@ public class HttpClient {
                 }
             }
         } catch (IllegalStateException e) {
-            e.printStackTrace();
+            log.error("", e);
         } finally {
             if (in != null) {
                 in.close();
