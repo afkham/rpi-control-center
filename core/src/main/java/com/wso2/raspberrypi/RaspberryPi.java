@@ -27,6 +27,8 @@ public class RaspberryPi {
     private Long lastUpdated;
     private String reservedFor;
     private String label;
+    private String consumerKey;
+    private String consumerSecret;
     private boolean blink;
     private boolean reboot;
     private boolean selected;
@@ -89,6 +91,22 @@ public class RaspberryPi {
 
     public void setLabel(String label) {
         this.label = label;
+    }
+
+    public String getConsumerKey() {
+        return consumerKey;
+    }
+
+    public void setConsumerKey(String consumerKey) {
+        this.consumerKey = consumerKey;
+    }
+
+    public String getConsumerSecret() {
+        return consumerSecret;
+    }
+
+    public void setConsumerSecret(String consumerSecret) {
+        this.consumerSecret = consumerSecret;
     }
 
     public String getReservedFor() {

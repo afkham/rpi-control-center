@@ -83,6 +83,8 @@ public class Util {
         pi.setReboot(rs.getBoolean("reboot"));
         pi.setSelected(rs.getBoolean("selected"));
         pi.setZoneID(rs.getString("zone"));
+        pi.setConsumerKey(rs.getString("consumer_key"));
+        pi.setConsumerSecret(rs.getString("consumer_secret"));
         return pi;
     }
 
@@ -383,6 +385,8 @@ public class Util {
                                                   ",reboot=" + raspberryPi.isReboot() +
                                                   ",selected=" + raspberryPi.isSelected() +
                                                   ",label='" + raspberryPi.getLabel() +"'" +
+                                                  ",consumer_key='" + raspberryPi.getConsumerKey() +"'" +
+                                                  ",consumer_secret='" + raspberryPi.getConsumerSecret() +"'" +
                                                   ",zone='" + raspberryPi.getZoneID() +"'" +
                                                   " where mac='" + raspberryPi.getMacAddress() + "'");
             prepStmt.execute();
