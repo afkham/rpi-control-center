@@ -320,6 +320,9 @@
         <% } %>
     </th>
     <th>
+        Update SW
+    </th>
+    <th>
         <% if (!orderby.equals("blink")) {%>
         <a href="index.jsp?orderby=blink">Blink</a>
         <% } else { %>
@@ -452,9 +455,9 @@
     <td>
         <%= sdf.format(new Date(lastUpdated))%>
     </td>
-    <td id="<%= mac%>.blink">
+    <td id="<%= mac%>.swUpdate">
         <%
-            if (pi.isBlink()) {
+            if (pi.isSoftwareUpdateRequired()) {
         %>
         <a href="#"
            onclick="xmlhttpGet('blink.jsp?mac=<%= mac%>&blink=false',
@@ -475,9 +478,9 @@
             }
         %>
     </td>
-    <td id="<%= mac%>.swUpdate">
+    <td id="<%= mac%>.blink">
         <%
-            if (pi.isSoftwareUpdateRequired()) {
+            if (pi.isBlink()) {
         %>
         <a href="#"
            onclick="xmlhttpGet('blink.jsp?mac=<%= mac%>&blink=false',
