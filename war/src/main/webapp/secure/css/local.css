@@ -1,3 +1,4 @@
+
 /* GLOBAL STYLES
 -------------------------------------------------- */
 /* Padding below the footer and lighter body text */
@@ -300,4 +301,15 @@ h1{
 footer{
     padding:10px;
     color:#fff;
+}
+.table th a {
+    color:#fff;
+    font-size:11px;
+}
+input[type=text]{
+width:200px;
+margin-bottom:0;
+}
+input[type=text]:disabled{
+width:200px;
 }

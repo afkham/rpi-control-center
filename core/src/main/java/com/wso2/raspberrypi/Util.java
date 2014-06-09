@@ -89,6 +89,8 @@ public class Util {
         pi.setZoneID(rs.getString("zone"));
         pi.setConsumerKey(rs.getString("consumer_key"));
         pi.setConsumerSecret(rs.getString("consumer_secret"));
+        pi.setUserCheckinURL(rs.getString("user_checkin_url"));
+        pi.setSoftwareUpdateRequired(rs.getBoolean("sw_update_reqd"));
         return pi;
     }
 
@@ -388,9 +390,11 @@ public class Util {
                     dbConnection.prepareStatement("UPDATE RASP_PI SET blink=" + raspberryPi.isBlink() +
                             ",reboot=" + raspberryPi.isReboot() +
                             ",selected=" + raspberryPi.isSelected() +
+                            ",sw_update_reqd=" + raspberryPi.isSoftwareUpdateRequired() +
                             ",label='" + raspberryPi.getLabel() + "'" +
                             ",consumer_key='" + raspberryPi.getConsumerKey() + "'" +
                             ",consumer_secret='" + raspberryPi.getConsumerSecret() + "'" +
+                            ",user_checkin_url='" + raspberryPi.getUserCheckinURL() + "'" +
                             ",zone='" + raspberryPi.getZoneID() + "'" +
                             " where mac='" + raspberryPi.getMacAddress() + "'");
             prepStmt.execute();

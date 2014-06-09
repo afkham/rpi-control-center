@@ -290,6 +290,7 @@
     </th>--%>
     <th>CK</th>
     <th>CS</th>
+    <th>User Reg. URL</th>
     <th>
         <% if (!orderby.equals("load_avg")) {%>
         <a href="index.jsp?orderby=load_avg">Load Avg.</a>
@@ -350,6 +351,7 @@
         String label = pi.getLabel();
         String ck = pi.getConsumerKey();
         String cs = pi.getConsumerSecret();
+        String userCheckinURL = pi.getUserCheckinURL();
         String zoneId = pi.getZoneID() != null ? pi.getZoneID() : "";
         boolean selected = pi.isSelected();
         long lastUpdated = pi.getLastUpdated();
@@ -404,6 +406,12 @@
            onclick="xmlhttpGet('updatepi.jsp?mac=<%= mac%>&cs=' + document.getElementById('<%= ip%>.cs').value,
                    'Updated Consumer Secret of Raspberry Pi <%= mac%>')">Apply</a>
     </td>
+    <td>
+        <input type="text" size="20" id="<%= ip%>.userCheckinURL" value="<%= userCheckinURL%>"/>
+        <a href="#"
+           onclick="xmlhttpGet('updatepi.jsp?mac=<%= mac%>&userReg=' + document.getElementById('<%= ip%>.userCheckinURL').value,
+                   'Updated user checkin URL  of Raspberry Pi <%= mac%>')">Apply</a>
+    </td>
     <%--<td>
         <input type="text" size="5" id="<%= ip%>.rack" value="<%= rack%>"/>
         <a href="#"
@@ -447,6 +455,29 @@
     <td id="<%= mac%>.blink">
         <%
             if (pi.isBlink()) {
+        %>
+        <a href="#"
+           onclick="xmlhttpGet('blink.jsp?mac=<%= mac%>&blink=false',
+                   'Blinking turned off for Raspberry Pi <%= mac%>');
+                   toggleBlink('<%= mac%>','on')">
+            <font color="green">On</font>
+        </a>
+        <%
+        } else {
+        %>
+        <a href="#"
+           onclick="xmlhttpGet('blink.jsp?mac=<%= mac%>&blink=true',
+                   'Blinking turned on for Raspberry Pi <%= mac%>');
+                   toggleBlink('<%= mac%>','off')">
+            <font color="red">Off</font>
+        </a>
+        <%
+            }
+        %>
+    </td>
+    <td id="<%= mac%>.swUpdate">
+        <%
+            if (pi.isSoftwareUpdateRequired()) {
         %>
         <a href="#"
            onclick="xmlhttpGet('blink.jsp?mac=<%= mac%>&blink=false',

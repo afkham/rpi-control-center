@@ -35,6 +35,8 @@ public class RaspberryPi {
     private String zoneID;
     private String rack;
     private String id;
+    private String userCheckinURL;
+    private boolean softwareUpdateRequired;
 
     public RaspberryPi() {
     }
@@ -147,5 +149,21 @@ public class RaspberryPi {
 
     public void setZoneID(String zoneID) {
         this.zoneID = zoneID;
+    }
+
+    public String getUserCheckinURL() {
+        return userCheckinURL;
+    }
+
+    public void setUserCheckinURL(String userCheckinURL) {
+        this.userCheckinURL = userCheckinURL;
+    }
+
+    public boolean isSoftwareUpdateRequired() {
+        return softwareUpdateRequired;
+    }
+
+    public void setSoftwareUpdateRequired(boolean softwareUpdateRequired) {
+        this.softwareUpdateRequired = softwareUpdateRequired;
     }
 }
