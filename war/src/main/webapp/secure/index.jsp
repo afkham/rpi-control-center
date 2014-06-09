@@ -412,7 +412,7 @@
     <td>
         <input type="text" size="20" id="<%= ip%>.userCheckinURL" value="<%= userCheckinURL%>"/>
         <a href="#"
-           onclick="xmlhttpGet('updatepi.jsp?mac=<%= mac%>&userReg=' + document.getElementById('<%= ip%>.userCheckinURL').value,
+           onclick="xmlhttpGet('updatepi.jsp?mac=<%= mac%>&userCheckinURL=' + document.getElementById('<%= ip%>.userCheckinURL').value,
                    'Updated user checkin URL  of Raspberry Pi <%= mac%>')">Apply</a>
     </td>
     <%--<td>

@@ -41,9 +41,26 @@ public class APICall {
     private static String consumerKey = "WgFO8ftXdewCSMAdMtf1Vl9uOAAa";
     private static String consumerSecret = "yXdCdk4nXCv3kHVf1_u3fA74jRYa";
     private static String tokenEndpoint = "http://gateway.apicloud.cloudpreview.wso2.com:8280/token";
+    private static String apiURLPrefix = "https://gateway.api.cloud.wso2.com:8243/t/wso2con/wso2coniot/1.0.0";
+
+    public static void setTokenEndpoint(String tokenEndpoint){
+        APICall.tokenEndpoint = tokenEndpoint;
+    }
+
+    public static void setConsumerKey(String consumerKey) {
+        APICall.consumerKey = consumerKey;
+    }
+
+    public static void setConsumerSecret(String consumerSecret) {
+        APICall.consumerSecret = consumerSecret;
+    }
+
+    public static void setApiURLPrefix(String apiURLPrefix) {
+        APICall.apiURLPrefix = apiURLPrefix;
+    }
 
     public static void registerDevice(String deviceID, String zoneID) {
-        String url = "https://gateway.apicloud.cloudpreview.wso2.com:8243/t/indikas.com/wso2coniot/1.0.0/conferences/2/iot/scannerZones/byScannerUUID";
+        String url = apiURLPrefix + "/conferences/2/iot/scannerZones/byScannerUUID";
         Token token = getToken();
         if (token != null) {
             HttpClient httpClient = new HttpClient();
@@ -70,7 +87,7 @@ public class APICall {
             HttpClient httpClient = new HttpClient();
             try {
                 HttpResponse httpResponse =
-                        httpClient.doGet("https://gateway.apicloud.cloudpreview.wso2.com:8243/t/indikas.com/wso2coniot/1.0.0/conferences/2/iot/zones",
+                        httpClient.doGet(apiURLPrefix + "/conferences/2/iot/zones",
                                 "Bearer " + token.getAccessToken());
                 int statusCode = httpResponse.getStatusLine().getStatusCode();
                 if (statusCode == 200) {

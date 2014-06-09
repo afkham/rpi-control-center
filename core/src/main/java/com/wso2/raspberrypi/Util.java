@@ -34,6 +34,17 @@ import java.util.List;
 public class Util {
     private static Log log = LogFactory.getLog(Util.class);
 
+    private static Connection dbConnection;
+
+    static {
+        BasicDataSource ds = getBasicDataSource();
+        try {
+            dbConnection = ds.getConnection();
+        } catch (SQLException e) {
+            log.error("Cannot acquire DB connection", e);
+        }
+    }
+
     public static List<RaspberryPi> getRaspberryPis(String orderBy) {
         System.out.println("Listing registered Raspberry Pis...");
 
@@ -41,14 +52,9 @@ public class Util {
             orderBy = "ip";
         }
         List<RaspberryPi> results = new ArrayList<RaspberryPi>();
-
-        BasicDataSource ds = getBasicDataSource();
-
-        Connection dbConnection = null;
         PreparedStatement prepStmt = null;
         ResultSet rs = null;
         try {
-            dbConnection = ds.getConnection();
             prepStmt = dbConnection.prepareStatement("SELECT * FROM RASP_PI ORDER BY " + orderBy);
             rs = prepStmt.executeQuery();
 
@@ -60,9 +66,6 @@ public class Util {
             log.error("", e);
         } finally {
             try {
-                if (dbConnection != null) {
-                    dbConnection.close();
-                }
                 if (prepStmt != null) {
                     prepStmt.close();
                 }
@@ -97,14 +100,9 @@ public class Util {
     public static RaspberryPi getRaspberryPi(String macAddress) {
         System.out.println("Listing Raspberry Pi with Mac Address: " + macAddress);
         RaspberryPi pi = null;
-
-        BasicDataSource ds = getBasicDataSource();
-
-        Connection dbConnection = null;
         PreparedStatement prepStmt = null;
         ResultSet rs = null;
         try {
-            dbConnection = ds.getConnection();
             prepStmt = dbConnection.prepareStatement("SELECT * FROM RASP_PI WHERE mac='" + macAddress + "'");
             rs = prepStmt.executeQuery();
 
@@ -116,9 +114,6 @@ public class Util {
             log.error("", e);
         } finally {
             try {
-                if (dbConnection != null) {
-                    dbConnection.close();
-                }
                 if (prepStmt != null) {
                     prepStmt.close();
                 }
@@ -134,12 +129,9 @@ public class Util {
 
     public static void registerRaspberryPi(String macAddress, String ipAddress) {
         System.out.println("Registering Raspberry Pi: " + macAddress + "/" + ipAddress);
-        BasicDataSource ds = getBasicDataSource();
-        Connection dbConnection = null;
         PreparedStatement prepStmt = null;
         ResultSet rs = null;
         try {
-            dbConnection = ds.getConnection();
             prepStmt =
                     dbConnection.prepareStatement("SELECT * FROM RASP_PI WHERE mac='" + macAddress + "'");
             rs = prepStmt.executeQuery();
@@ -159,9 +151,6 @@ public class Util {
             log.error("", e);
         } finally {
             try {
-                if (dbConnection != null) {
-                    dbConnection.close();
-                }
                 if (prepStmt != null) {
                     prepStmt.close();
                 }
@@ -182,11 +171,8 @@ public class Util {
             }
         }
         System.out.println("Removing all Raspberry Pis...");
-        BasicDataSource ds = getBasicDataSource();
-        Connection dbConnection = null;
         PreparedStatement prepStmt = null;
         try {
-            dbConnection = ds.getConnection();
             prepStmt =
                     dbConnection.prepareStatement("DELETE FROM RASP_PI");
             prepStmt.execute();
@@ -194,9 +180,6 @@ public class Util {
             log.error("", e);
         } finally {
             try {
-                if (dbConnection != null) {
-                    dbConnection.close();
-                }
                 if (prepStmt != null) {
                     prepStmt.close();
                 }
@@ -208,12 +191,9 @@ public class Util {
 
     public static void reservePi(String owner, String macAddress) {
         System.out.println("Changing owner of RPi " + macAddress + " to " + owner);
-        BasicDataSource ds = getBasicDataSource();
-        Connection dbConnection = null;
         PreparedStatement prepStmt = null;
         ResultSet rs = null;
         try {
-            dbConnection = ds.getConnection();
             prepStmt =
                     dbConnection.prepareStatement("SELECT * FROM RASP_PI where mac='" + macAddress + "'");
             rs = prepStmt.executeQuery();
@@ -233,9 +213,6 @@ public class Util {
             log.error("", e);
         } finally {
             try {
-                if (dbConnection != null) {
-                    dbConnection.close();
-                }
                 if (prepStmt != null) {
                     prepStmt.close();
                 }
@@ -250,11 +227,8 @@ public class Util {
 
     public static void releasePi(String macAddress) {
         System.out.println("Releasing RPi " + macAddress);
-        BasicDataSource ds = getBasicDataSource();
-        Connection dbConnection = null;
         PreparedStatement prepStmt = null;
         try {
-            dbConnection = ds.getConnection();
             prepStmt =
                     dbConnection.prepareStatement("UPDATE RASP_PI SET owner='' where mac='" + macAddress + "'");
             prepStmt.execute();
@@ -262,9 +236,6 @@ public class Util {
             log.error("", e);
         } finally {
             try {
-                if (dbConnection != null) {
-                    dbConnection.close();
-                }
                 if (prepStmt != null) {
                     prepStmt.close();
                 }
@@ -276,14 +247,9 @@ public class Util {
 
     public static List<KVPair> getKeyValuePairs() {
         List<KVPair> results = new ArrayList<KVPair>();
-
-        BasicDataSource ds = getBasicDataSource();
-
-        Connection dbConnection = null;
         PreparedStatement prepStmt = null;
         ResultSet rs = null;
         try {
-            dbConnection = ds.getConnection();
             prepStmt = dbConnection.prepareStatement("SELECT * FROM KV_PAIR ORDER BY k");
             rs = prepStmt.executeQuery();
 
@@ -294,9 +260,6 @@ public class Util {
             log.error("", e);
         } finally {
             try {
-                if (dbConnection != null) {
-                    dbConnection.close();
-                }
                 if (prepStmt != null) {
                     prepStmt.close();
                 }
@@ -312,13 +275,9 @@ public class Util {
 
     public static String getValue(String key) {
         String value = null;
-        BasicDataSource ds = getBasicDataSource();
-
-        Connection dbConnection = null;
         PreparedStatement prepStmt = null;
         ResultSet rs = null;
         try {
-            dbConnection = ds.getConnection();
             prepStmt = dbConnection.prepareStatement("SELECT * FROM KV_PAIR WHERE k='" + key + "'");
             rs = prepStmt.executeQuery();
 
@@ -329,9 +288,6 @@ public class Util {
             log.error("", e);
         } finally {
             try {
-                if (dbConnection != null) {
-                    dbConnection.close();
-                }
                 if (prepStmt != null) {
                     prepStmt.close();
                 }
@@ -357,10 +313,8 @@ public class Util {
 
     public static void updateKeyValuePair(String key, String value) {
         BasicDataSource ds = getBasicDataSource();
-        Connection dbConnection = null;
         PreparedStatement prepStmt = null;
         try {
-            dbConnection = ds.getConnection();
             prepStmt =
                     dbConnection.prepareStatement("UPDATE KV_PAIR SET v='" + value + "' where k='" + key + "'");
             prepStmt.execute();
@@ -368,9 +322,6 @@ public class Util {
             log.error("", e);
         } finally {
             try {
-                if (dbConnection != null) {
-                    dbConnection.close();
-                }
                 if (prepStmt != null) {
                     prepStmt.close();
                 }
@@ -381,11 +332,8 @@ public class Util {
     }
 
     public static void updateRaspberryPi(RaspberryPi raspberryPi) {
-        BasicDataSource ds = getBasicDataSource();
-        Connection dbConnection = null;
         PreparedStatement prepStmt = null;
         try {
-            dbConnection = ds.getConnection();
             prepStmt =
                     dbConnection.prepareStatement("UPDATE RASP_PI SET blink=" + raspberryPi.isBlink() +
                             ",reboot=" + raspberryPi.isReboot() +
@@ -402,9 +350,6 @@ public class Util {
             log.error("", e);
         } finally {
             try {
-                if (dbConnection != null) {
-                    dbConnection.close();
-                }
                 if (prepStmt != null) {
                     prepStmt.close();
                 }
@@ -416,11 +361,8 @@ public class Util {
 
     public static void deleteRaspberryPi(String mac) {
         System.out.println("Removing Raspberry Pi: " + mac);
-        BasicDataSource ds = getBasicDataSource();
-        Connection dbConnection = null;
         PreparedStatement prepStmt = null;
         try {
-            dbConnection = ds.getConnection();
             prepStmt =
                     dbConnection.prepareStatement("DELETE FROM RASP_PI WHERE mac='" + mac + "'");
             prepStmt.execute();
@@ -428,9 +370,6 @@ public class Util {
             log.error("", e);
         } finally {
             try {
-                if (dbConnection != null) {
-                    dbConnection.close();
-                }
                 if (prepStmt != null) {
                     prepStmt.close();
                 }
@@ -442,14 +381,9 @@ public class Util {
 
     public static List<RaspberryPi> getSelectedPis() {
         List<RaspberryPi> results = new ArrayList<RaspberryPi>();
-
-        BasicDataSource ds = getBasicDataSource();
-
-        Connection dbConnection = null;
         PreparedStatement prepStmt = null;
         ResultSet rs = null;
         try {
-            dbConnection = ds.getConnection();
             prepStmt = dbConnection.prepareStatement("SELECT * FROM RASP_PI WHERE selected=true");
             rs = prepStmt.executeQuery();
 
@@ -461,9 +395,6 @@ public class Util {
             log.error("", e);
         } finally {
             try {
-                if (dbConnection != null) {
-                    dbConnection.close();
-                }
                 if (prepStmt != null) {
                     prepStmt.close();
                 }

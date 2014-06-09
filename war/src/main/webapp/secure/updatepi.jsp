@@ -6,6 +6,7 @@
     String zoneID = request.getParameter("zoneID");
     String ck = request.getParameter("ck");
     String cs = request.getParameter("cs");
+    String userCheckinURL = request.getParameter("userCheckinURL");
     String label = request.getParameter("label");
     RaspberryPi raspberryPi = Util.getRaspberryPi(mac);
     if (zoneID != null) {
@@ -21,6 +22,9 @@
     }
     if(label != null){
         raspberryPi.setZoneID(zoneID);
+    }
+    if(userCheckinURL != null){
+        raspberryPi.setUserCheckinURL(userCheckinURL);
     }
     Util.updateRaspberryPi(raspberryPi);
     System.out.println("Updated Raspberry Pi: " + mac);

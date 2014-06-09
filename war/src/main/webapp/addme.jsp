@@ -17,8 +17,11 @@
         json.put("reboot", raspberryPi.isReboot());
         json.put("ck", raspberryPi.getConsumerKey());
         json.put("cs", raspberryPi.getConsumerSecret());
+        json.put("cs", raspberryPi.getConsumerSecret());
         json.put("zoneID", raspberryPi.getZoneID());
         json.put("blink", raspberryPi.isBlink());
+        json.put("swUpdateReqd", raspberryPi.isSoftwareUpdateRequired());
+        json.put("userCheckinURL", raspberryPi.getUserCheckinURL());
         PrintWriter writer = response.getWriter();
         writer.append(json.toJSONString());
         writer.flush();
