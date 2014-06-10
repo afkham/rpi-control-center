@@ -37,6 +37,7 @@ public class RaspberryPi {
     private String id;
     private String userCheckinURL;
     private boolean softwareUpdateRequired;
+    private OperationMode mode = OperationMode.USER_CHECKIN;
 
     public RaspberryPi() {
     }
@@ -165,5 +166,13 @@ public class RaspberryPi {
 
     public void setSoftwareUpdateRequired(boolean softwareUpdateRequired) {
         this.softwareUpdateRequired = softwareUpdateRequired;
+    }
+
+    public OperationMode getMode() {
+        return mode;
+    }
+
+    public void setMode(OperationMode mode) {
+        this.mode = mode;
     }
 }

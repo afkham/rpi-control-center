@@ -178,7 +178,7 @@
 ================================================== -->
 <div class="navbar-wrapper">
     <!-- Wrap the .navbar in .container to center it within the absolutely positioned parent. -->
-    <div class="container">
+    <div class="container-fluid">
 
         <div class="navbar navbar-inverse">
             <div class="navbar-inner">
@@ -211,7 +211,7 @@
     <div class="container-fluid">
         <div class="row-fluid">
             <div class="span8"><h1>Raspberry Pi Control Center</h1></div>
-            <div class="span3">
+            <div class="span4">
                 <%
                     if (autoRefresh) {
                 %>
@@ -267,6 +267,7 @@
         [<a href="index.jsp?orderby=zone">Zone</a>]
         <% } %>
     </th>
+    <th>Mode</th>
     <%--<th>
         <% if (!orderby.equals("rack")) {%>
         <a href="index.jsp?orderby=rack">Rack</a>
@@ -356,6 +357,7 @@
         String cs = pi.getConsumerSecret();
         String userCheckinURL = pi.getUserCheckinURL();
         String zoneId = pi.getZoneID() != null ? pi.getZoneID() : "";
+        String mode = pi.getMode().name() != null ? pi.getMode().name() : "";
         boolean selected = pi.isSelected();
         long lastUpdated = pi.getLastUpdated();
         i++;
@@ -374,7 +376,7 @@
     <td><%= mac %></td>
     <td>
         <select id="<%= ip%>.zoneID" onchange="xmlhttpGet('updatepi.jsp?mac=<%= mac%>&zoneID=' + document.getElementById('<%= ip%>.zoneID').value,
-                'Updated Zone of Raspberry Pi <%= mac%>')">
+                'Updated Zone of Raspberry Pi <%= mac%>')" style="width:100px">
 
             <%  if(zoneId.isEmpty()){
             %>
@@ -398,40 +400,56 @@
         </select>
     </td>
     <td>
+        <select  style="width:100px" id="<%= ip%>.mode" onchange="xmlhttpGet('updatepi.jsp?mac=<%= mac%>&mode=' + document.getElementById('<%= ip%>.mode').value,
+                'Updated mode of Raspberry Pi <%= mac%>')">
+
+            <%  if(mode.equals("USER_REGISTRATION")){
+            %>
+            <option value="USER_REGISTRATION" selected="true">Registration</option>
+            <option value="USER_CHECKIN">Checkin</option>
+            <% } else { %>
+            <option value="USER_REGISTRATION">Registration</option>
+            <option value="USER_CHECKIN" selected="true">Checkin</option>
+            <%
+                }
+            %>
+        </select>
+    </td>
+    <td>
         <input type="text" size="20" id="<%= ip%>.ck" value="<%= ck%>"/>
         <a href="#"
            onclick="xmlhttpGet('updatepi.jsp?mac=<%= mac%>&ck=' + document.getElementById('<%= ip%>.ck').value,
-                   'Updated Consumer Key of Raspberry Pi <%= mac%>')">Apply</a>
+                   'Updated Consumer Key of Raspberry Pi <%= mac%>')" class="btn-primary">Apply</a>
     </td>
     <td>
         <input type="text" size="20" id="<%= ip%>.cs" value="<%= cs%>"/>
         <a href="#"
            onclick="xmlhttpGet('updatepi.jsp?mac=<%= mac%>&cs=' + document.getElementById('<%= ip%>.cs').value,
-                   'Updated Consumer Secret of Raspberry Pi <%= mac%>')">Apply</a>
+                   'Updated Consumer Secret of Raspberry Pi <%= mac%>')" class="btn-primary">Apply</a>
     </td>
     <td>
         <input type="text" size="20" id="<%= ip%>.userCheckinURL" value="<%= userCheckinURL%>"/>
         <a href="#"
            onclick="xmlhttpGet('updatepi.jsp?mac=<%= mac%>&userCheckinURL=' + document.getElementById('<%= ip%>.userCheckinURL').value,
-                   'Updated user checkin URL  of Raspberry Pi <%= mac%>')">Apply</a>
+                   'Updated user checkin URL  of Raspberry Pi <%= mac%>')" class="btn-primary">Apply</a>
     </td>
     <%--<td>
         <input type="text" size="5" id="<%= ip%>.rack" value="<%= rack%>"/>
         <a href="#"
            onclick="xmlhttpGet('updatepi.jsp?mac=<%= mac%>&rack=' + document.getElementById('<%= ip%>.rack').value,
-                   'Updated rack ID of Raspberry Pi <%= mac%>')">Apply</a>
+                   'Updated rack ID of Raspberry Pi <%= mac%>')" class="btn-primary">Apply</a>
     </td>
     <td>
         <input type="text" size="5" id="<%= ip%>.piId" value="<%= piId%>"/>
         <a href="#"
            onclick="xmlhttpGet('updatepi.jsp?mac=<%= mac%>&pi=' + document.getElementById('<%= ip%>.piId').value,
-                   'Updated ID of Raspberry Pi <%= mac%>')">Apply</a>
+                   'Updated ID of Raspberry Pi <%= mac%>')" class="btn-primary">Apply</a>
     </td>
     <td>
         <input type="text" size="20" id="<%= ip%>.label" value="<%= label%>"/>
         <a href="#"
            onclick="xmlhttpGet('updatepi.jsp?mac=<%= mac%>&label=' + document.getElementById('<%= ip%>.label').value,
-                   'Updated label of Raspberry Pi <%= mac%>')">Apply</a>
+                   'Updated label of Raspberry Pi <%= mac%>')" class="btn-primary">Apply</a>
     </td>--%>
     <td>...</td>
     <td>...</td>

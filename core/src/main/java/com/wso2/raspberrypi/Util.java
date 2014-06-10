@@ -94,6 +94,10 @@ public class Util {
         pi.setConsumerSecret(rs.getString("consumer_secret"));
         pi.setUserCheckinURL(rs.getString("user_checkin_url"));
         pi.setSoftwareUpdateRequired(rs.getBoolean("sw_update_reqd"));
+        String mode = rs.getString("mode");
+        if (mode != null) {
+            pi.setMode(OperationMode.valueOf(mode));
+        }
         return pi;
     }
 
@@ -344,6 +348,7 @@ public class Util {
                             ",consumer_secret='" + raspberryPi.getConsumerSecret() + "'" +
                             ",user_checkin_url='" + raspberryPi.getUserCheckinURL() + "'" +
                             ",zone='" + raspberryPi.getZoneID() + "'" +
+                            ",mode='" + raspberryPi.getMode().name() + "'" +
                             " where mac='" + raspberryPi.getMacAddress() + "'");
             prepStmt.execute();
         } catch (SQLException e) {

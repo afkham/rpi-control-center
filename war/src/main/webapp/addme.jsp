@@ -19,6 +19,7 @@
         json.put("cs", raspberryPi.getConsumerSecret());
         json.put("cs", raspberryPi.getConsumerSecret());
         json.put("zoneID", raspberryPi.getZoneID());
+        json.put("mode", raspberryPi.getMode().name());
         json.put("blink", raspberryPi.isBlink());
         json.put("swUpdateReqd", raspberryPi.isSoftwareUpdateRequired());
         json.put("userCheckinURL", raspberryPi.getUserCheckinURL());
