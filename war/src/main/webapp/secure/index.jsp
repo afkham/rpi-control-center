@@ -289,9 +289,9 @@
         [<a href="index.jsp?orderby=label">Label</a>]
         <% } %>
     </th>--%>
-    <th>CK</th>
-    <th>CS</th>
-    <th>User Reg. URL</th>
+    <th><a href="#">CK</a></th>
+    <th><a href="#">CS</a></th>
+    <th><a href="#">User Reg. URL</a></th>
     <th>
         <% if (!orderby.equals("load_avg")) {%>
         <a href="index.jsp?orderby=load_avg">Load Avg.</a>
