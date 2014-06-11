@@ -46,7 +46,7 @@
     <![endif]-->
     <style type="text/css">
         tr.d0 td {
-            background-color: rgba(176, 168, 174, 0.30);
+            background-color:#eeeeee;
             color: black;
         }
 
@@ -242,7 +242,7 @@
 <br/>
 <br/>
 
-<table class="table table-striped table-bordered" id="pi-table">
+<table class="table table-bordered" id="pi-table">
 <thead>
 <tr style="background: rgba(131,118,113,0.71); color: black;">
     <th>#</th>
@@ -267,7 +267,7 @@
         [<a href="index.jsp?orderby=zone">Zone</a>]
         <% } %>
     </th>
-    <th>Mode</th>
+    <th><a href="#">Mode</a></th>
     <%--<th>
         <% if (!orderby.equals("rack")) {%>
         <a href="index.jsp?orderby=rack">Rack</a>
@@ -362,7 +362,7 @@
         long lastUpdated = pi.getLastUpdated();
         i++;
         String clazz;
-        if (System.currentTimeMillis() - lastUpdated > 3 * 60 * 1000) {
+        if (System.currentTimeMillis() - lastUpdated > 1 * 60 * 1000) {
             clazz = "inactive";
         } else if (selected) {
             clazz = "sel";
