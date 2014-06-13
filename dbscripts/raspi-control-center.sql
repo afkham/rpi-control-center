@@ -52,6 +52,7 @@ CREATE TABLE `RASP_PI` (
   `ip` varchar(100) NOT NULL,
   `last_updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `label` varchar(45) DEFAULT NULL,
+  `mode` varchar(45) DEFAULT NULL,
   `owner` varchar(100) DEFAULT NULL,
   `blink` bit(1) DEFAULT NULL,
   `reboot` bit(1) DEFAULT NULL,
