@@ -29,7 +29,7 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>commons-dbcp.wso2</groupId>
+            <groupId>commons-dbcp</groupId>
             <artifactId>commons-dbcp</artifactId>
         </dependency>
 

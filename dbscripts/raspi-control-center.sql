@@ -57,7 +57,7 @@ CREATE TABLE `RASP_PI` (
   `blink` bit(1) DEFAULT NULL,
   `reboot` bit(1) DEFAULT NULL,
   `selected` bit(1) DEFAULT NULL,
-  `zoneID` varchar(100) DEFAULT NULL,
+  `zone` varchar(100) DEFAULT NULL,
   `consumer_key` varchar(200) DEFAULT NULL,
   `consumer_secret` varchar(200) DEFAULT NULL,
   `user_checkin_url` varchar(200) DEFAULT NULL,
